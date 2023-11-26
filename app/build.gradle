@@ -32,6 +32,13 @@ android {
     }
 }
 
+// Support for build.yml
+tasks.register('printVersionName') {
+    doLast {
+        println android.defaultConfig.versionName
+    }
+}
+
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
