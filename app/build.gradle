@@ -3,17 +3,21 @@ plugins {
   id 'org.jetbrains.kotlin.android'
 }
 
+def PACKAGE_NAME = 'com.draco.pdnsqs'
+
 android {
   compileSdk 31
 
   defaultConfig {
-    applicationId "com.draco.pdnsqs"
+    applicationId "${PACKAGE_NAME}"
+
     minSdk 28
     targetSdk 31
-    versionCode 3
-    versionName "1.2"
 
-    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    versionCode 3
+    versionName '1.2'
+
+    testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
   }
 
   buildTypes {
@@ -23,10 +27,12 @@ android {
       proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
   }
+
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
+
   kotlinOptions {
     jvmTarget = '1.8'
   }
