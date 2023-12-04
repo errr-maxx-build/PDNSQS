@@ -10,11 +10,9 @@ import android.os.IBinder
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 
-class QSTileService : TileService() {
-    companion object {
-        const val ADB_COMMAND = "adb shell pm grant ${BuildConfig.APPLICATION_ID} android.permission.WRITE_SECURE_SETTINGS"
-    }
+private const val ADB_COMMAND = "adb shell pm grant ${BuildConfig.APPLICATION_ID} android.permission.WRITE_SECURE_SETTINGS"
 
+class QSTileService : TileService() {
     private lateinit var secureSettings: SecureSettings
     private lateinit var dialog: AlertDialog
 
@@ -29,10 +27,7 @@ class QSTileService : TileService() {
             .setMessage(R.string.permission_message)
             .setPositiveButton(R.string.permission_dismiss) { _, _ -> }
             .setNeutralButton(R.string.permission_copy) { _, _ ->
-                val clipData = ClipData.newPlainText(
-                    getString(R.string.permission_title),
-                    ADB_COMMAND
-                )
+                val clipData = ClipData.newPlainText(getString(R.string.permission_title), ADB_COMMAND)
                 clipboardManager.setPrimaryClip(clipData)
             }
             .create()
@@ -40,26 +35,23 @@ class QSTileService : TileService() {
         return super.onBind(intent)
     }
 
-    private fun updateState() {
-        qsTile.state = when (secureSettings.state()) {
-            SecureSettings.AUTO -> Tile.STATE_ACTIVE
-            SecureSettings.ON   -> Tile.STATE_ACTIVE
-            SecureSettings.OFF  -> Tile.STATE_INACTIVE
-            else                -> Tile.STATE_INACTIVE
+    private fun updateTile() {
+        qsTile.state = when (secureSettings.mode()) {
+            PDNS.ON -> Tile.STATE_ACTIVE
+            else    -> Tile.STATE_INACTIVE
         }
 
-        val state = when (secureSettings.state()) {
-            SecureSettings.AUTO -> "Auto"
-            SecureSettings.ON   -> "On"
-            SecureSettings.OFF  -> "Off"
-            else                -> "Unknown"
+        val mode = when (secureSettings.mode()) {
+            PDNS.AUTO -> "Auto"
+            PDNS.ON   -> "On"
+            PDNS.OFF  -> "Off"
         }
 
         if (Build.VERSION.SDK_INT >= 29) {
-            qsTile.subtitle = state
+            qsTile.subtitle = mode
         } else {
-            // Android < 10 does not support subtitle (secondary label), so use label
-            qsTile.label = "PDNS (${state})"
+            // Android < 10 does not support subtitle (secondary label), so use label instead
+            qsTile.label = "PDNS (${mode})"
         }
 
         qsTile.updateTile()
@@ -67,7 +59,7 @@ class QSTileService : TileService() {
 
     override fun onStartListening() {
         super.onStartListening()
-        updateState()
+        updateTile()
     }
 
     override fun onClick() {
@@ -78,14 +70,11 @@ class QSTileService : TileService() {
             return
         }
 
-        val newState = when (secureSettings.state()) {
-            SecureSettings.AUTO -> SecureSettings.ON
-            SecureSettings.ON   -> SecureSettings.OFF
-            SecureSettings.OFF  -> SecureSettings.AUTO
-            else                -> SecureSettings.ON
-        }
-
-        secureSettings.togglePDNS(newState)
-        updateState()
+        secureSettings.setMode(when (secureSettings.mode()) {
+            PDNS.AUTO -> PDNS.ON
+            PDNS.ON   -> PDNS.OFF
+            PDNS.OFF  -> PDNS.AUTO
+        })
+        updateTile()
     }
 }
