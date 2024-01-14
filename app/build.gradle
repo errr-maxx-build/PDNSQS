@@ -1,56 +1,56 @@
 plugins {
-  id 'com.android.application'
-  id 'org.jetbrains.kotlin.android'
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 def PACKAGE_NAME = 'com.draco.pdnsqs'
 
 android {
-  namespace 'com.draco.pdnsqs'
+    namespace 'com.draco.pdnsqs'
 
-  compileSdk 31
+    compileSdk 31
 
-  defaultConfig {
-    applicationId "${PACKAGE_NAME}"
+    defaultConfig {
+        applicationId "${PACKAGE_NAME}"
 
-    minSdk 28
-    targetSdk 31
+        minSdk 28
+        targetSdk 31
 
-    versionCode 3
-    versionName '1.2'
+        versionCode 3
+        versionName '1.2'
 
-    testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-  }
-
-  buildTypes {
-    release {
-      minifyEnabled true
-      shrinkResources true
-      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
-  }
 
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-  }
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
 
-  kotlinOptions {
-    jvmTarget = '1.8'
-  }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 // Support for build.yml
 tasks.register('printVersionName') {
-  doLast {
-    println android.defaultConfig.versionName
-  }
+    doLast {
+        println android.defaultConfig.versionName
+    }
 }
 
 dependencies {
-  implementation 'androidx.core:core-ktx:1.7.0'
-  implementation 'androidx.appcompat:appcompat:1.4.0'
-  testImplementation 'junit:junit:4.13.2'
-  androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-  androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
