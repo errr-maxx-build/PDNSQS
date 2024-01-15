@@ -42,7 +42,7 @@ jobs:
           GITHUB_SHA="${GITHUB_SHA:0:7}"
 
           # App/apk name
-          APP_NAME="app-${{ github.event.repository.name }}-${GITHUB_SHA}"
+          APP_NAME="${{ github.event.repository.name }}-${GITHUB_SHA}"
           echo APP_NAME="$APP_NAME" >> "$GITHUB_ENV"
 
           # Build
